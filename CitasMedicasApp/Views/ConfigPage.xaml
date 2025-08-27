@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="CitasMedicasApp.Views.ConfigPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="Configuración">
+
+    <ScrollView Padding="20">
+        <StackLayout Spacing="20">
+
+            <!-- Header -->
+            <Frame BackgroundColor="{AppThemeBinding Light=#E8F5E8, Dark=#1B4D1B}"
+                   HasShadow="True" 
+                   CornerRadius="10" 
+                   Padding="20">
+                <StackLayout Spacing="10">
+                    <Image Source="settings_icon.png" 
+                           HeightRequest="60" 
+                           WidthRequest="60"
+                           HorizontalOptions="Center" />
+                    <Label Text="Configuración" 
+                           FontSize="20" 
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light=#2E7D32, Dark=#4CAF50}"
+                           HorizontalOptions="Center" />
+                </StackLayout>
+            </Frame>
+
+            <!-- Información de la app -->
+            <Frame BackgroundColor="{AppThemeBinding Light=White, Dark=#333}"
+                   HasShadow="True" 
+                   CornerRadius="10" 
+                   Padding="20">
+                <StackLayout Spacing="10">
+                    <Label Text="Información de la Aplicación" 
+                           FontSize="16" 
+                           FontAttributes="Bold" />
+                    <Label Text="Versión: 1.0.0" FontSize="14" />
+                    <Label Text="Sistema de Citas Médicas" FontSize="14" />
+                    <Label Text="Desarrollado con .NET MAUI" FontSize="12" TextColor="Gray" />
+                </StackLayout>
+            </Frame>
+
+            <!-- Configuración de servidor -->
+            <Frame BackgroundColor="{AppThemeBinding Light=White, Dark=#333}"
+                   HasShadow="True" 
+                   CornerRadius="10" 
+                   Padding="20">
+                <StackLayout Spacing="10">
+                    <Label Text="Configuración del Servidor" 
+                           FontSize="16" 
+                           FontAttributes="Bold" />
+                    <Label Text="URL del Servidor:" FontSize="14" />
+                    <Label Text="http://localhost:8081" 
+                           FontSize="12" 
+                           TextColor="{AppThemeBinding Light=#1976D2, Dark=#42A5F5}" />
+                    <Label Text="Estado: Conectado" 
+                           FontSize="12" 
+                           TextColor="Green" />
+                </StackLayout>
+            </Frame>
+
+            <!-- Botones de acción -->
+            <StackLayout Spacing="10">
+                <Button Text="Cambiar Contraseña" 
+                       Clicked="OnCambiarPasswordClicked"
+                       BackgroundColor="{AppThemeBinding Light=#2E7D32, Dark=#4CAF50}"
+                       TextColor="White" />
+
+                <Button Text="Cerrar Sesión" 
+                       Clicked="OnLogoutClicked"
+                       BackgroundColor="{AppThemeBinding Light=#D32F2F, Dark=#F44336}"
+                       TextColor="White" />
+            </StackLayout>
+
+        </StackLayout>
+    </ScrollView>
+
+</ContentPage>

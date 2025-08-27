@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="CitasMedicasApp.Views.HistorialPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:CitasMedicasApp.ViewModels"
+             xmlns:models="clr-namespace:CitasMedicasApp.Models"
+             x:DataType="vm:HistorialViewModel"
+             Title="{Binding Title}">
+
+    <Grid RowDefinitions="Auto,Auto,*" Padding="20">
+
+        <!-- Formulario de búsqueda -->
+        <Frame Grid.Row="0" 
+               BackgroundColor="{AppThemeBinding Light=White, Dark=#333}"
+               HasShadow="True" 
+               CornerRadius="10" 
+               Padding="20"
+               Margin="0,0,0,15">
+            <StackLayout Spacing="15">
+                <Label Text="Buscar Historial Clínico" 
+                       FontSize="18" 
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light=#2E7D32, Dark=#4CAF50}" />
+
+                <StackLayout Spacing="10">
+                    <Label Text="Cédula del Paciente:" 
+                           FontSize="14" />
+                    <Entry Text="{Binding CedulaPaciente}" 
+                           Placeholder="Ingrese la cédula (10 dígitos)"
+                           Keyboard="Numeric"
+                           MaxLength="10" />
+                </StackLayout>
+
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                    <Button Grid.Column="0"
+                           Text="BUSCAR" 
+                           Command="{Binding BuscarHistorialCommand}"
+                           BackgroundColor="{AppThemeBinding Light=#2E7D32, Dark=#4CAF50}"
+                           TextColor="White" />
+                    <Button Grid.Column="1"
+                           Text="LIMPIAR" 
+                           Command="{Binding LimpiarCommand}"
+                           BackgroundColor="{AppThemeBinding Light=#757575, Dark=#616161}"
+                           TextColor="White" />
+                </Grid>
+            </StackLayout>
+        </Frame>
+
+        <!-- Loading indicator -->
+        <ActivityIndicator Grid.Row="1" 
+                          IsVisible="{Binding IsBusy}" 
+                          IsRunning="{Binding IsBusy}"
+                          Color="{AppThemeBinding Light=#2E7D32, Dark=#4CAF50}"
+                          Margin="0,10" />
+
+        <!-- Resultados -->
+        <ScrollView Grid.Row="2" IsVisible="{Binding HasResults}">
+            <CollectionView ItemsSource="{Binding HistorialesList}" 
+                   SelectionMode="Single"
+                   SelectedItem="{Binding HistorialSeleccionado}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:HistorialClinico">
+                        <!-- AGREGAR ESTA LÍNEA -->
+                        <Frame BackgroundColor="{AppThemeBinding Light=White, Dark=#333}"
+                       HasShadow="True" 
+                       CornerRadius="10" 
+                       Padding="20"
+                       Margin="0,5">
+                            <StackLayout Spacing="10">
+
+                                <!-- Información del paciente -->
+                                <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,10">
+                                    <StackLayout Grid.Column="0">
+                                        <Label Text="{Binding PacienteNombre}" 
+                                       FontSize="18" 
+                                       FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light=#2E7D32, Dark=#4CAF50}" />
+                                        <Label Text="{Binding PacienteCedula, StringFormat='Cédula: {0}'}" 
+                                       FontSize="14" 
+                                       TextColor="{AppThemeBinding Light=#666, Dark=#999}" />
+                                    </StackLayout>
+                                    <StackLayout Grid.Column="1" HorizontalOptions="End">
+                                        <Label Text="{Binding Edad, StringFormat='{0} años'}" 
+                                       FontSize="16" 
+                                       FontAttributes="Bold"
+                                       HorizontalOptions="Center"
+                                       TextColor="{AppThemeBinding Light=#1976D2, Dark=#42A5F5}" />
+                                    </StackLayout>
+                                </Grid>
+
+                                <BoxView HeightRequest="1" BackgroundColor="#E0E0E0" />
+
+                                <!-- Datos médicos -->
+                                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="10">
+
+                                    <StackLayout Grid.Column="0" Grid.Row="0">
+                                        <Label Text="Fecha de Nacimiento:" 
+                                       FontSize="12" 
+                                       FontAttributes="Bold" />
+                                        <Label Text="{Binding FechaNacimiento, StringFormat='{0:dd/MM/yyyy}'}" 
+                                       FontSize="12" />
+                                    </StackLayout>
+
+                                    <StackLayout Grid.Column="1" Grid.Row="0">
+                                        <Label Text="Tipo de Sangre:" 
+                                       FontSize="12" 
+                                       FontAttributes="Bold" />
+                                        <Label Text="{Binding TipoSangre}" 
+                                       FontSize="12" 
+                                       TextColor="{AppThemeBinding Light=#D32F2F, Dark=#F44336}" />
+                                    </StackLayout>
+
+                                    <StackLayout Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
+                                        <Label Text="Alergias:" 
+                                       FontSize="12" 
+                                       FontAttributes="Bold" />
+                                        <Label Text="{Binding Alergias}" 
+                                       FontSize="12" 
+                                       LineBreakMode="WordWrap" />
+                                    </StackLayout>
+
+                                    <StackLayout Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
+                                        <Label Text="Antecedentes Médicos:" 
+                                       FontSize="12" 
+                                       FontAttributes="Bold" />
+                                        <Label Text="{Binding AntecedentesMedicos}" 
+                                       FontSize="12" 
+                                       LineBreakMode="WordWrap" />
+                                    </StackLayout>
+
+                                </Grid>
+
+                                <BoxView HeightRequest="1" BackgroundColor="#E0E0E0" />
+
+                                <!-- Contacto de emergencia -->
+                                <StackLayout Spacing="5">
+                                    <Label Text="Contacto de Emergencia:" 
+                                   FontSize="12" 
+                                   FontAttributes="Bold" />
+                                    <Label Text="{Binding ContactoEmergencia}" 
+                                   FontSize="12" />
+                                    <Label Text="{Binding TelefonoEmergencia}" 
+                                   FontSize="12" 
+                                   TextColor="{AppThemeBinding Light=#1976D2, Dark=#42A5F5}" />
+                                </StackLayout>
+
+                            </StackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </ScrollView>
+        <!-- Mensaje cuando no hay resultados -->
+        <StackLayout IsVisible="False"
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center"
+                    Spacing="20">
+            <Image Source="search_icon.png" 
+                  HeightRequest="100" 
+                  WidthRequest="100" 
+                  Opacity="0.5" />
+            <Label Text="Ingrese una cédula para buscar el historial clínico" 
+                  FontSize="16" 
+                  TextColor="{AppThemeBinding Light=#666, Dark=#999}"
+                  HorizontalOptions="Center"
+                  HorizontalTextAlignment="Center" />
+        </StackLayout>
+
+    </Grid>
+
+</ContentPage>

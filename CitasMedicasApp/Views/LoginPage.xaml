@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="CitasMedicasApp.Views.LoginPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:CitasMedicasApp.ViewModels"
+             x:DataType="vm:LoginViewModel"
+             Title="{Binding Title}"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <Grid RowDefinitions="*,Auto,*" Padding="20">
+            
+            <StackLayout Grid.Row="1" Spacing="30">
+                
+                <!-- Header -->
+                <StackLayout Spacing="10">
+                    <Label Text="Sistema de Citas Médicas" 
+                           FontSize="24" 
+                           FontAttributes="Bold"
+                           TextColor="#2E7D32"
+                           HorizontalOptions="Center" />
+                    <Label Text="Iniciar Sesión" 
+                           FontSize="18" 
+                           TextColor="Gray"
+                           HorizontalOptions="Center" />
+                </StackLayout>
+
+                <!-- Formulario de login -->
+                <Frame BackgroundColor="White" 
+                      HasShadow="True" 
+                      CornerRadius="10" 
+                      Padding="20">
+                    <StackLayout Spacing="15">
+                        
+                        <Entry Text="{Binding Username}" 
+                              Placeholder="Usuario" 
+                              ReturnType="Next" />
+
+                        <Entry Text="{Binding Password}" 
+                              Placeholder="Contraseña" 
+                              IsPassword="True"
+                              ReturnType="Done" />
+                              
+                    </StackLayout>
+                </Frame>
+
+                <Button Text="INICIAR SESIÓN" 
+                       Command="{Binding LoginCommand}"
+                       BackgroundColor="#2E7D32"
+                       TextColor="White"
+                       FontAttributes="Bold"
+                       FontSize="16"
+                       HeightRequest="50"
+                       CornerRadius="25" />
+
+                <ActivityIndicator IsVisible="{Binding IsBusy}" 
+                                  IsRunning="{Binding IsBusy}"
+                                  Color="#2E7D32" />
+
+            </StackLayout>
+        </Grid>
+    </ScrollView>
+
+</ContentPage>

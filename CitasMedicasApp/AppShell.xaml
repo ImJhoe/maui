@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="CitasMedicasApp.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:CitasMedicasApp.Views"
+    Title="Citas Médicas"
+    FlyoutBehavior="Disabled">
+
+    <!-- Login Page (Initial) -->
+    <ShellContent
+        x:Name="LoginShell"
+        Title="Iniciar Sesión"
+        ContentTemplate="{DataTemplate views:LoginPage}"
+        Route="login"
+        Shell.FlyoutBehavior="Disabled" />
+
+    <!-- Main App Content (After Login) -->
+    <TabBar x:Name="MainTabBar" IsVisible="False">
+
+        <!-- Home/Menu Principal -->
+        <Tab Title="Inicio" Icon="home_icon.png">
+            <ShellContent 
+                ContentTemplate="{DataTemplate views:MainMenuPage}" 
+                Route="mainmenu" />
+        </Tab>
+
+        <!-- Historial (for Recepcionista y Doctor) -->
+        <Tab Title="Historial" Icon="history_icon.png" x:Name="HistorialTab">
+            <ShellContent 
+                ContentTemplate="{DataTemplate views:HistorialPage}" 
+                Route="historial" />
+        </Tab>
+
+        <!-- Citas -->
+        <Tab Title="Citas" Icon="calendar_icon.png">
+            <ShellContent 
+                ContentTemplate="{DataTemplate views:CitasPage}" 
+                Route="citas" />
+        </Tab>
+
+        <!-- Configuración -->
+        <Tab Title="Config" Icon="settings_icon.png">
+            <ShellContent 
+                ContentTemplate="{DataTemplate views:ConfigPage}" 
+                Route="config" />
+        </Tab>
+
+    </TabBar>
+
+</Shell>

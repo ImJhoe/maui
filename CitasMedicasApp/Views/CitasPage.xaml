@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="CitasMedicasApp.Views.CitasPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:CitasMedicasApp.ViewModels"
+             xmlns:models="clr-namespace:CitasMedicasApp.Models"
+             x:DataType="vm:CitasViewModel"
+             Title="{Binding Title}">
+
+    <ScrollView Padding="20">
+        <StackLayout Spacing="15">
+
+            <!-- Filtros por Especialidad y Médico -->
+            <Frame BackgroundColor="{AppThemeBinding Light=White, Dark=#333}"
+                   HasShadow="True" 
+                   CornerRadius="10" 
+                   Padding="20">
+                <StackLayout Spacing="15">
+                    <Label Text="Buscar por Especialidad y Médico" 
+                           FontSize="18" 
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light=#2E7D32, Dark=#4CAF50}" />
+
+                    <StackLayout Spacing="10">
+                        <Label Text="Especialidad:" FontSize="14" />
+                        <Picker ItemsSource="{Binding EspecialidadesList}"
+                               ItemDisplayBinding="{Binding NombreEspecialidad}"
+                               SelectedItem="{Binding EspecialidadSeleccionada}"
+                               Title="Seleccione una especialidad" />
+                    </StackLayout>
+
+                    <StackLayout Spacing="10" IsVisible="{Binding CanSelectMedico}">
+                        <Label Text="Médico:" FontSize="14" />
+                        <Picker ItemsSource="{Binding MedicosList}"
+                               ItemDisplayBinding="{Binding NombreCompleto}"
+                               SelectedItem="{Binding MedicoSeleccionado}"
+                               Title="Seleccione un médico (opcional)" />
+                    </StackLayout>
+
+                    <Label Text="Nota: Si es médico, solo verá sus propias citas" 
+                           FontSize="11" 
+                           TextColor="{AppThemeBinding Light=#FF9800, Dark=#FFB74D}"
+                           IsVisible="{Binding CanSelectMedico, Converter={StaticResource InvertedBoolConverter}}" />
+
+                    <Button Text="BUSCAR CITAS" 
+                           Command="{Binding BuscarCitasCommand}"
+                           BackgroundColor="{AppThemeBinding Light=#2E7D32, Dark=#4CAF50}"
+                           TextColor="White" />
+                </StackLayout>
+            </Frame>
+
+            <!-- Filtros por Rango de Fechas -->
+            <Frame BackgroundColor="{AppThemeBinding Light=White, Dark=#333}"
+                   HasShadow="True" 
+                   CornerRadius="10" 
+                   Padding="20">
+                <StackLayout Spacing="15">
+                    <Label Text="Buscar por Rango de Fechas" 
+                           FontSize="18" 
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light=#1976D2, Dark=#42A5F5}" />
+
+                    <Grid RowSpacing="10" ColumnSpacing="10">
+                        <StackLayout Grid.Column="0" Spacing="5">
+                            <Label Text="Fecha Inicio:" FontSize="14" />
+                            <DatePicker Date="{Binding FechaInicio}" 
+                                       Format="dd/MM/yyyy" />
+                        </StackLayout>
+
+                        <StackLayout Grid.Column="1" Spacing="5">
+                            <Label Text="Fecha Fin:" FontSize="14" />
+                            <DatePicker Date="{Binding FechaFin}" 
+                                       Format="dd/MM/yyyy" />
+                        </StackLayout>
+                    </Grid>
+
+                    <StackLayout Spacing="10" IsVisible="{Binding CanSelectMedico}">
+                        <Label Text="Médico (opcional):" FontSize="14" />
+                        <Picker ItemsSource="{Binding MedicosList}"
+                               ItemDisplayBinding="{Binding NombreCompleto}"
+                               SelectedItem="{Binding MedicoSeleccionado}"
+                               Title="Todos los médicos" />
+                    </StackLayout>
+
+                    <Button Text="CONSULTAR POR FECHAS" 
+                           Command="{Binding ConsultarPorFechasCommand}"
+                           BackgroundColor="{AppThemeBinding Light=#1976D2, Dark=#42A5F5}"
+                           TextColor="White" />
+                </StackLayout>
+            </Frame>
+
+            <!-- Botón limpiar -->
+            <Button Text="LIMPIAR FILTROS" 
+                   Command="{Binding LimpiarCommand}"
+                   BackgroundColor="{AppThemeBinding Light=#757575, Dark=#616161}"
+                   TextColor="White" />
+
+            <!-- Loading indicator -->
+            <ActivityIndicator IsVisible="{Binding IsBusy}" 
+                              IsRunning="{Binding IsBusy}"
+                              Color="{AppThemeBinding Light=#2E7D32, Dark=#4CAF50}" />
+
+            <!-- Resultados -->
+            <!-- Resultados -->
+            <StackLayout IsVisible="{Binding HasResults}" Spacing="10">
+                <Label Text="{Binding CitasList.Count, StringFormat='Citas encontradas: {0}'}" 
+           FontSize="16" 
+           FontAttributes="Bold"
+           TextColor="{AppThemeBinding Light=#2E7D32, Dark=#4CAF50}" />
+
+                <CollectionView ItemsSource="{Binding CitasList}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Cita">
+                            <!-- AGREGAR ESTA LÍNEA -->
+                            <Frame BackgroundColor="{AppThemeBinding Light=#F8F9FA, Dark=#424242}"
+                       HasShadow="True" 
+                       CornerRadius="10" 
+                       Padding="15"
+                       Margin="0,5">
+                                <StackLayout Spacing="10">
+
+                                    <!-- Header de la cita -->
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <StackLayout Grid.Column="0">
+                                            <Label Text="{Binding FechaHora, StringFormat='{0:dd/MM/yyyy HH:mm}'}" 
+                                       FontSize="16" 
+                                       FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light=#1976D2, Dark=#42A5F5}" />
+                                            <Label Text="{Binding Estado}" 
+                                       FontSize="12" 
+                                       TextColor="{Binding Estado, Converter={StaticResource EstadoCitaToColorConverter}}"
+                                       FontAttributes="Bold" />
+                                        </StackLayout>
+                                        <Frame Grid.Column="1" 
+                                   BackgroundColor="{Binding Estado, Converter={StaticResource EstadoCitaToColorConverter}}"
+                                   Padding="8,4" 
+                                   CornerRadius="12"
+                                   HasShadow="False">
+                                            <Label Text="{Binding IdCita, StringFormat='#{0}'}" 
+                                       TextColor="White" 
+                                       FontSize="10"
+                                       FontAttributes="Bold" />
+                                        </Frame>
+                                    </Grid>
+
+                                    <BoxView HeightRequest="1" BackgroundColor="#E0E0E0" />
+
+                                    <!-- Información del paciente -->
+                                    <StackLayout Spacing="5">
+                                        <Label Text="Paciente:" 
+                                   FontSize="12" 
+                                   FontAttributes="Bold" />
+                                        <Label Text="{Binding PacienteNombre}" 
+                                   FontSize="14" />
+                                        <Label Text="{Binding PacienteCedula, StringFormat='CI: {0}'}" 
+                                   FontSize="11" 
+                                   TextColor="{AppThemeBinding Light=#666, Dark=#999}" />
+                                    </StackLayout>
+
+                                    <!-- Información médica -->
+                                    <Grid ColumnDefinitions="*,*" RowSpacing="10" ColumnSpacing="10">
+                                        <StackLayout Grid.Column="0" Spacing="5">
+                                            <Label Text="Médico:" 
+                                       FontSize="12" 
+                                       FontAttributes="Bold" />
+                                            <Label Text="{Binding MedicoNombre}" 
+                                       FontSize="12" />
+                                        </StackLayout>
+                                        <StackLayout Grid.Column="1" Spacing="5">
+                                            <Label Text="Especialidad:" 
+                                       FontSize="12" 
+                                       FontAttributes="Bold" />
+                                            <Label Text="{Binding EspecialidadNombre}" 
+                                       FontSize="12" />
+                                        </StackLayout>
+                                    </Grid>
+
+                                    <!-- Sucursal -->
+                                    <StackLayout Spacing="5">
+                                        <Label Text="Sucursal:" 
+                                   FontSize="12" 
+                                   FontAttributes="Bold" />
+                                        <Label Text="{Binding SucursalNombre}" 
+                                   FontSize="12" 
+                                   TextColor="{AppThemeBinding Light=#795548, Dark=#A1887F}" />
+                                    </StackLayout>
+
+                                    <!-- Observaciones -->
+                                    <StackLayout IsVisible="False" 
+                                    Spacing="5">
+                                        <Label Text="Observaciones:" 
+                                   FontSize="12" 
+                                   FontAttributes="Bold" />
+                                        <Label Text="{Binding Observaciones}" 
+                                   FontSize="11" 
+                                   LineBreakMode="WordWrap"
+                                   TextColor="{AppThemeBinding Light=#FF9800, Dark=#FFB74D}" />
+                                    </StackLayout>
+
+                                </StackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+            <!-- Mensaje cuando no hay resultados -->
+            <StackLayout IsVisible="False"
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Center"
+                        Spacing="20"
+                        Margin="0,50">
+                <Image Source="calendar_icon.png" 
+                      HeightRequest="100" 
+                      WidthRequest="100" 
+                      Opacity="0.5" />
+                <Label Text="Seleccione los filtros y presione buscar para ver las citas" 
+                      FontSize="16" 
+                      TextColor="{AppThemeBinding Light=#666, Dark=#999}"
+                      HorizontalOptions="Center"
+                      HorizontalTextAlignment="Center" />
+            </StackLayout>
+
+        </StackLayout>
+    </ScrollView>
+
+</ContentPage>
