@@ -5,60 +5,122 @@
              xmlns:vm="clr-namespace:CitasMedicasApp.ViewModels"
              x:DataType="vm:LoginViewModel"
              Title="{Binding Title}"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F5F5F5">
 
-    <ScrollView>
-        <Grid RowDefinitions="*,Auto,*" Padding="20">
-            
-            <StackLayout Grid.Row="1" Spacing="30">
-                
-                <!-- Header -->
-                <StackLayout Spacing="10">
-                    <Label Text="Sistema de Citas Médicas" 
-                           FontSize="24" 
-                           FontAttributes="Bold"
-                           TextColor="#2E7D32"
-                           HorizontalOptions="Center" />
-                    <Label Text="Iniciar Sesión" 
-                           FontSize="18" 
-                           TextColor="Gray"
-                           HorizontalOptions="Center" />
-                </StackLayout>
+    <Grid RowDefinitions="*,Auto,*">
 
-                <!-- Formulario de login -->
+        <!-- Fondo decorativo superior -->
+        <Frame Grid.Row="0" 
+               BackgroundColor="#2E7D32" 
+               HasShadow="False"
+             
+               Margin="0,0,0,-20" />
+
+        <!-- Contenido principal -->
+        <ScrollView Grid.Row="1" Padding="30,0">
+            <StackLayout Spacing="25">
+
+                <!-- Logo y título -->
                 <Frame BackgroundColor="White" 
-                      HasShadow="True" 
-                      CornerRadius="10" 
-                      Padding="20">
+                       HasShadow="True" 
+                       CornerRadius="20" 
+                       Padding="30"
+                       Margin="0,20,0,0">
                     <StackLayout Spacing="15">
-                        
-                        <Entry Text="{Binding Username}" 
-                              Placeholder="Usuario" 
-                              ReturnType="Next" />
-
-                        <Entry Text="{Binding Password}" 
-                              Placeholder="Contraseña" 
-                              IsPassword="True"
-                              ReturnType="Done" />
-                              
+                        <Image Source="medical_icon.png" 
+                               HeightRequest="80" 
+                               WidthRequest="80"
+                               HorizontalOptions="Center" />
+                        <Label Text="Sistema de Citas Médicas" 
+                               FontSize="22" 
+                               FontAttributes="Bold"
+                               TextColor="#2E7D32"
+                               HorizontalOptions="Center" />
+                        <Label Text="Iniciar Sesión" 
+                               FontSize="16" 
+                               TextColor="#666"
+                               HorizontalOptions="Center" />
                     </StackLayout>
                 </Frame>
 
-                <Button Text="INICIAR SESIÓN" 
-                       Command="{Binding LoginCommand}"
-                       BackgroundColor="#2E7D32"
-                       TextColor="White"
-                       FontAttributes="Bold"
-                       FontSize="16"
-                       HeightRequest="50"
-                       CornerRadius="25" />
+                <!-- Formulario mejorado -->
+                <Frame BackgroundColor="White" 
+                       HasShadow="True" 
+                       CornerRadius="15" 
+                       Padding="25">
+                    <StackLayout Spacing="20">
+
+                        <Frame BackgroundColor="#F8F9FA" 
+                               HasShadow="False" 
+                               CornerRadius="10" 
+                               Padding="5">
+                            <Entry Text="{Binding Username}" 
+                                   Placeholder="👤 Usuario" 
+                                   FontSize="16"
+                                   BackgroundColor="Transparent"
+                                   ReturnType="Next" />
+                        </Frame>
+
+                        <Frame BackgroundColor="#F8F9FA" 
+                               HasShadow="False" 
+                               CornerRadius="10" 
+                               Padding="5">
+                            <Entry Text="{Binding Password}" 
+                                   Placeholder="🔒 Contraseña" 
+                                   IsPassword="True"
+                                   FontSize="16"
+                                   BackgroundColor="Transparent"
+                                   ReturnType="Done" />
+                        </Frame>
+
+                        <!-- Indicador de conexión -->
+                        <StackLayout Orientation="Horizontal" 
+                                     HorizontalOptions="Center"
+                                     Spacing="10">
+                            <Ellipse Fill="{Binding IsServerConnected, Converter={StaticResource BoolToConnectionColorConverter}}"
+                                     WidthRequest="10" 
+                                     HeightRequest="10" />
+                            <Label Text="{Binding IsServerConnected, Converter={StaticResource BoolToConnectionTextConverter}}" 
+                                   FontSize="12"
+                                   TextColor="#666" />
+                        </StackLayout>
+
+                    </StackLayout>
+                </Frame>
+
+                <Frame BackgroundColor="#2E7D32"
+       HasShadow="True"
+       CornerRadius="27"
+       Padding="0"
+       Margin="0">
+                    <Button Text="INICIAR SESIÓN" 
+            Command="{Binding LoginCommand}"
+            BackgroundColor="Transparent"
+            TextColor="White"
+            FontAttributes="Bold"
+            FontSize="16"
+            HeightRequest="55"
+            CornerRadius="27" />
+                </Frame>
 
                 <ActivityIndicator IsVisible="{Binding IsBusy}" 
-                                  IsRunning="{Binding IsBusy}"
-                                  Color="#2E7D32" />
+                                   IsRunning="{Binding IsBusy}"
+                                   Color="#2E7D32"
+                                   HeightRequest="30" />
 
             </StackLayout>
-        </Grid>
-    </ScrollView>
+        </ScrollView>
 
+        <!-- Footer -->
+        <StackLayout Grid.Row="2" 
+                     VerticalOptions="End" 
+                     Padding="20,0,20,30">
+            <Label Text="© 2024 Sistema de Citas Médicas" 
+                   FontSize="12" 
+                   TextColor="#999"
+                   HorizontalOptions="Center" />
+        </StackLayout>
+
+    </Grid>
 </ContentPage>
